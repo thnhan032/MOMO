@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <a href="/">
+            <img src="https://developers.momo.vn/v2/images/logo.svg" alt="logo momo" width="100px" height="100px" style="margin-bottom: 30px;"/>
+        </a>
+        <% if (resultCode == 0) {%>
+            <h1> Thanh toán thành công với momo</h1>
+        <% } else { %>
+            <h1> Thanh toán thất bại với momo (<%= message %>) </h1>
+        <% } %>
+    </div>
+    
+</body>
+</html>
