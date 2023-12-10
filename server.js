@@ -24,8 +24,8 @@ app.get("/payment", (req, res) => {
     var requestId = partnerCode + new Date().getTime();
     var orderId = requestId;
     var orderInfo = "Thanh toán với ATM MoMo";
-    var redirectUrl = "http://localhost:5000/";
-    var ipnUrl = "http://localhost:5000/api/notify";
+    var redirectUrl = "https://momo-test.onrender.com/";
+    var ipnUrl = "https://momo-test.onrender.com/api/notify";
     // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
     var amount = "10000";
     var requestType = "payWithATM"
