@@ -15,19 +15,31 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 
 
-app.get("/payment", (req, res) => {
+app.post("/payment", (req, res) => {
+    const products = req.body.products;
     //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
     //parameters
+    let totalPrice = 0;
+    console.log("products: " + products);
+    if (products) {
+        products.forEach((product) => {
+            console.log(product);
+            totalPrice += parseInt(product.price);
+        })
+    }
+    console.log(totalPrice);
     var partnerCode = "MOMO";
     var accessKey = "F8BBA842ECF85";
     var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
     var requestId = partnerCode + new Date().getTime();
     var orderId = requestId;
     var orderInfo = "Thanh toán với ATM MoMo";
-    var redirectUrl = "https://momo-test.onrender.com/";
-    var ipnUrl = "https://momo-test.onrender.com/api/notify";
+    //var redirectUrl = "https://momo-test.onrender.com/";
+    //var ipnUrl = "https://momo-test.onrender.com/api/notify"; 
+    const redirectUrl = "http://localhost:5000/";
+    var ipnUrl = "http://localhost:5000/api/notify"; 
     // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
-    var amount = "10000";
+    var amount = "" + totalPrice;
     var requestType = "payWithATM"
     var extraData = ""; //pass empty value if your merchant does not have stores
 
@@ -71,7 +83,16 @@ app.get("/payment", (req, res) => {
     .then(res => res.json())
     .then((data) => {
         // console.log("data: ", data);
-        res.redirect(data.payUrl)
+        if (data.payUrl != null) {
+            return res.json({
+                status: "success",
+                nextUrl: data.payUrl
+            })
+        }
+        return res.json({
+            status: "fail"
+        })
+        
     })
     .catch(err => console.log(err));
 

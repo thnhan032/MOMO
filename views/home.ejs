@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-75">
           <div class="container">
-            <form action="/action_page.php">
+            <form action="#" onclick="PayWithMomo(event)">
       
               <div class="row">
                 <div class="col-50">
@@ -40,7 +40,7 @@
                   <h3>Payment</h3>
                   <label for="fname">Accepted Cards</label>
                   <div class="icon-container">
-                    <a href="/payment">
+                    <a href="#" id="MomoPayment" onclick="PayWithMomo(event)">
                         <img src="https://developers.momo.vn/v2/images/logo.svg" alt="logo momo" width="50px" height="50px"/>
                     </a>
                   </div>
@@ -67,7 +67,7 @@
               <label>
                 <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
               </label>
-              <input type="submit" value="Continue to checkout" class="btn">
+              <input type="submit"  value="Continue to checkout" class="btn">
             </form>
           </div>
         </div>
@@ -80,14 +80,48 @@
                 <b>4</b>
               </span>
             </h4>
-            <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-            <p><a href="#">Product 2</a> <span class="price">$5</span></p>
-            <p><a href="#">Product 3</a> <span class="price">$8</span></p>
-            <p><a href="#">Product 4</a> <span class="price">$2</span></p>
+            <p><a href="#" class="products">Product 1</a> <span class="price">15000</span></p>
+            <p><a href="#" class="products">Product 2</a> <span class="price">5000</span></p>
+            <p><a href="#" class="products">Product 3</a> <span class="price">8000</span></p>
+            <p><a href="#" class="products">Product 4</a> <span class="price">2000</span></p>
             <hr>
-            <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
+            <p>Total <span class="price" style="color:black"><b>30000</b></span></p>
           </div>
         </div>
       </div>
+      <script>
+        async function PayWithMomo(e) {
+          e.preventDefault();
+          
+          const productElements = document.querySelectorAll(".products");
+          console.log(productElements);
+          const products = [];
+          productElements.forEach((productElement) => {
+            console.log(productElement.nextElementSibling);
+            products.push({
+              name: productElement.textContent,
+              price: productElement.nextElementSibling.textContent
+            });
+          })
+          console.log(products);
+          fetch("/payment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body:  JSON.stringify({products: products})
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 'success') {
+              location.href = data.nextUrl;
+            }
+          })
+          .catch(err => {
+            console.error(err);
+          })
+        }
+      </script>
 </body>
 </html>
